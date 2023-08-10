@@ -1,4 +1,4 @@
-package com.pkmn.api.controllers;
+package com.pkmn.api.pokemon.controllers;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.pkmn.api.entities.Pokemon;
-import com.pkmn.api.services.PokemonService;
+import com.pkmn.api.pokemon.entities.Pokemon;
+import com.pkmn.api.pokemon.services.PokemonService;
 
 @RestController
 @RequestMapping(value = "/pokemons")

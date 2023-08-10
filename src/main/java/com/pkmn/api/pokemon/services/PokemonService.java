@@ -1,13 +1,12 @@
-package com.pkmn.api.services;
+package com.pkmn.api.pokemon.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pkmn.api.entities.Pokemon;
-import com.pkmn.api.repositories.PokemonRepository;
+import com.pkmn.api.pokemon.entities.Pokemon;
+import com.pkmn.api.pokemon.repositories.PokemonRepository;
 
 @Service
 public class PokemonService {

@@ -1,4 +1,4 @@
-package com.pkmn.api.entities;
+package com.pkmn.api.pokemon.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
