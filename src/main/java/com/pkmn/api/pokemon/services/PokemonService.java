@@ -24,4 +24,8 @@ public class PokemonService {
         return foundPkmn;
     }
 
+    public PokemonMaxDto findByName(String name){
+        return new PokemonMaxDto(repo.findByName(name));
+    }
+
 }
