@@ -35,6 +35,4 @@ public class PokemonMinDto {
         return type2;
     }
 
-    
-
 }
