@@ -5,8 +5,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.pkmn.api.Utils.Utils;
 import com.pkmn.api.pokemon.dto.PokemonMaxDto;
 import com.pkmn.api.pokemon.dto.PokemonMinDto;
+import com.pkmn.api.pokemon.entities.Pokemon;
 import com.pkmn.api.pokemon.repositories.PokemonRepository;
 
 @Service
@@ -20,12 +22,29 @@ public class PokemonService {
     }
 
     public PokemonMaxDto findByPokedexEntry(Integer pokedexEntry){
-        PokemonMaxDto foundPkmn = new PokemonMaxDto(repo.findByPokedexEntry(pokedexEntry));
-        return foundPkmn;
+
+        Pokemon searchResult = repo.findByPokedexEntry(pokedexEntry);
+
+        if(searchResult != null){
+            PokemonMaxDto pokemonDto = new PokemonMaxDto(searchResult);
+            return pokemonDto;
+        }
+
+        //For now, return an empty Dto just to not break anything
+        return new PokemonMaxDto();
     }
 
     public PokemonMaxDto findByName(String name){
-        return new PokemonMaxDto(repo.findByName(name));
+
+        String searchString = Utils.capitalizeString(name);
+
+        Pokemon searchResult = repo.findByName(searchString);
+        
+        if(searchResult != null){
+            return new PokemonMaxDto(searchResult);
+        }
+
+        return new PokemonMaxDto();
     }
 
 }

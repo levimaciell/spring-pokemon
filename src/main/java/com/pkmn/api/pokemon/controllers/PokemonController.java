@@ -35,11 +35,8 @@ public class PokemonController {
 
     @GetMapping(value = "/pokemon-name/{pokemonName}")
     public ResponseEntity<PokemonMaxDto> findByPokemonName(@PathVariable String pokemonName){
-
-        //Capitalize string
-        String search = Utils.capitalizeString(pokemonName);
-
-        PokemonMaxDto pkmn = pkmnService.findByName(search);
+        
+        PokemonMaxDto pkmn = pkmnService.findByName(pokemonName);
 
         return ResponseEntity.ok().body(pkmn);
         

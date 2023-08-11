@@ -3,7 +3,6 @@ package com.pkmn.api.pokemon.dto;
 import org.springframework.beans.BeanUtils;
 
 import com.pkmn.api.pokemon.entities.Pokemon;
-import com.pkmn.api.pokemon.projections.PokemonMaxProjection;
 
 public class PokemonMaxDto {
 
@@ -26,22 +25,6 @@ public class PokemonMaxDto {
 
     public PokemonMaxDto(Pokemon pokemon) {
         BeanUtils.copyProperties(pokemon, this);
-    }
-
-    public PokemonMaxDto(PokemonMaxProjection projection){
-        pokedexEntry = projection.getPokedexEntry();
-        name = projection.getName();
-        type1 = projection.getType1();
-        type2 = projection.getType2();
-        total = projection.getTotal();
-        hp = projection.getHp();
-        attack = projection.getAttack();
-        defense = projection.getDefense();
-        spAttack = projection.getSpAttack();
-        spDefense = projection.getSpDefense();
-        speed = projection.getSpeed();
-        generation = projection.getGeneration();
-        legendary = projection.getLegendary();
     }
 
     public int getPokedexEntry() {
