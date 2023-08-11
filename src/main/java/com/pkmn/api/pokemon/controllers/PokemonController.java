@@ -20,19 +20,19 @@ public class PokemonController {
     @Autowired
     private PokemonService pkmnService;
 
-    @GetMapping
+    @GetMapping(value = "/search/all")
     public ResponseEntity<List<PokemonMinDto>> findAll(){
         List<PokemonMinDto> list = pkmnService.findAll();
         return ResponseEntity.ok().body(list);
     }
 
-    @GetMapping(value = "/entry/{pokedexEntry}")
+    @GetMapping(value = "/search/entry/{pokedexEntry}")
     public ResponseEntity<PokemonMaxDto> findByPokedexEntry(@PathVariable Integer pokedexEntry){
         PokemonMaxDto pkmn = pkmnService.findByPokedexEntry(pokedexEntry);
         return ResponseEntity.ok().body(pkmn);
     }
 
-    @GetMapping(value = "/pokemon-name/{pokemonName}")
+    @GetMapping(value = "/search/pokemon-name/{pokemonName}")
     public ResponseEntity<PokemonMaxDto> findByPokemonName(@PathVariable String pokemonName){
 
         PokemonMaxDto pkmn = pkmnService.findByName(pokemonName);
