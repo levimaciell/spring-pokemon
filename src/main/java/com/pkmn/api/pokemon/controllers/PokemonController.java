@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.pkmn.api.Utils.Utils;
 import com.pkmn.api.pokemon.dto.PokemonMaxDto;
 import com.pkmn.api.pokemon.dto.PokemonMinDto;
-import com.pkmn.api.pokemon.entities.Pokemon;
 import com.pkmn.api.pokemon.services.PokemonService;
 
 @RestController
@@ -35,8 +35,14 @@ public class PokemonController {
 
     @GetMapping(value = "/pokemon-name/{pokemonName}")
     public ResponseEntity<PokemonMaxDto> findByPokemonName(@PathVariable String pokemonName){
-        PokemonMaxDto pkmn = pkmnService.findByName(pokemonName);
+
+        //Capitalize string
+        String search = Utils.capitalizeString(pokemonName);
+
+        PokemonMaxDto pkmn = pkmnService.findByName(search);
+
         return ResponseEntity.ok().body(pkmn);
+        
     }
 
 }
