@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pkmn.api.pokemon.dto.PokemonMaxDto;
 import com.pkmn.api.pokemon.dto.PokemonMinDto;
+import com.pkmn.api.pokemon.exceptions.PokemonNotfoundException;
 import com.pkmn.api.pokemon.services.PokemonService;
 
 @RestController
@@ -28,17 +29,27 @@ public class PokemonController {
 
     @GetMapping(value = "/search/entry/{pokedexEntry}")
     public ResponseEntity<PokemonMaxDto> findByPokedexEntry(@PathVariable Integer pokedexEntry){
-        PokemonMaxDto pkmn = pkmnService.findByPokedexEntry(pokedexEntry);
-        return ResponseEntity.ok().body(pkmn);
+        PokemonMaxDto pkmn;
+        try {
+            pkmn = pkmnService.findByPokedexEntry(pokedexEntry);
+            return ResponseEntity.ok().body(pkmn);
+        } 
+        catch (PokemonNotfoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @GetMapping(value = "/search/pokemon-name/{pokemonName}")
     public ResponseEntity<PokemonMaxDto> findByPokemonName(@PathVariable String pokemonName){
 
-        PokemonMaxDto pkmn = pkmnService.findByName(pokemonName);
+        try {
+            PokemonMaxDto pkmn = pkmnService.findByName(pokemonName);
+            return ResponseEntity.ok().body(pkmn);
+        } 
+        catch (PokemonNotfoundException e) {
+            return ResponseEntity.notFound().build();
+        }
 
-        return ResponseEntity.ok().body(pkmn);
-        
     }
 
 }

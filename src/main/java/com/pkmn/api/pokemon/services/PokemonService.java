@@ -9,6 +9,7 @@ import com.pkmn.api.Utils.Utils;
 import com.pkmn.api.pokemon.dto.PokemonMaxDto;
 import com.pkmn.api.pokemon.dto.PokemonMinDto;
 import com.pkmn.api.pokemon.entities.Pokemon;
+import com.pkmn.api.pokemon.exceptions.PokemonNotfoundException;
 import com.pkmn.api.pokemon.repositories.PokemonRepository;
 
 @Service
@@ -21,7 +22,7 @@ public class PokemonService {
         return repo.findAll().stream().map(PokemonMinDto::new).toList();
     }
 
-    public PokemonMaxDto findByPokedexEntry(Integer pokedexEntry){
+    public PokemonMaxDto findByPokedexEntry(Integer pokedexEntry) throws PokemonNotfoundException{
 
         Pokemon searchResult = repo.findByPokedexEntry(pokedexEntry);
 
@@ -29,22 +30,23 @@ public class PokemonService {
             PokemonMaxDto pokemonDto = new PokemonMaxDto(searchResult);
             return pokemonDto;
         }
-
-        //For now, return an empty Dto just to not break anything
-        return new PokemonMaxDto();
+        else{
+            throw new PokemonNotfoundException("Pokemon with pokedex entry " + pokedexEntry + " was not found");
+        }
+        
     }
 
-    public PokemonMaxDto findByName(String name){
+    public PokemonMaxDto findByName(String name) throws PokemonNotfoundException{
 
-        String searchString = Utils.capitalizeString(name);
-
-        Pokemon searchResult = repo.findByName(searchString);
+        Pokemon searchResult = repo.findByName(Utils.capitalizeString(name));
         
         if(searchResult != null){
             return new PokemonMaxDto(searchResult);
         }
-
-        return new PokemonMaxDto();
+        else{
+            throw new PokemonNotfoundException("Pokemon with name " + name + " was not found");
+        }
+        
     }
 
 }
