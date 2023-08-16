@@ -1,5 +1,10 @@
 package com.pkmn.api.utils;
 
+import com.pkmn.api.exceptions.UtilsException;
+import com.pkmn.api.user.dto.UserDto;
+import com.pkmn.api.user.dto.UserIdDto;
+import com.pkmn.api.user.entities.User;
+
 public class Utils {
     
     /**
@@ -16,6 +21,30 @@ public class Utils {
         }
 
         return string;
+    }
+
+
+    public static User userDtoToUser(UserIdDto user) throws UtilsException{
+
+        if(user == null){
+            throw new UtilsException("User Informed is null !");
+        }
+        else{
+            if(user.getPassword().isBlank()){
+                throw new UtilsException("User Informed has a blank password!");
+            }
+
+            else if(user.getUserName().isBlank()){
+                throw new UtilsException("User Informed has a blank userName!\nUsername = " + user.getUserName());
+            }
+        }
+
+        User userReturn = new User();
+        //userReturn.setId(user.getId());
+        userReturn.setPassword(user.getPassword());
+        userReturn.setUserName(user.getUserName());
+
+        return userReturn;
     }
 
 }

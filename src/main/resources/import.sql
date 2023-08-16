@@ -152,9 +152,3 @@ INSERT INTO pokemons VALUES (100,100,1,100,False,151,100,100,100,600,'Mew','Psyc
 
 
 
-
-
-INSERT INTO users VALUES (1, 'temp6t', 'rattata');
-INSERT INTO users VALUES (2, 'ross', 'ross123');
-INSERT INTO users VALUES (3, 'Lewis', 'goat123');
-
