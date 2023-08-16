@@ -22,10 +22,10 @@ public class UserService {
     private UserRepository repository;
 
     @Transactional
-    public UserDto insertUser(UserIdDto user){
+    public UserIdDto insertUser(UserIdDto user){
         try {
             User userInsert = Utils.userDtoToUser(user);
-            return new UserDto(repository.save(userInsert));
+            return new UserIdDto(repository.save(userInsert));
         } 
         catch (UtilsException e) {
             throw new UserServiceException("There was a problem converting a UserDto to a User!\nReason:" + e.getMessage());

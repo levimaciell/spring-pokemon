@@ -152,3 +152,10 @@ INSERT INTO pokemons VALUES (100,100,1,100,False,151,100,100,100,600,'Mew','Psyc
 
 
 
+
+
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('temp6t', 'rattatastRATS');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Pokey', 'pokeeeey');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('James', 'OHwdeer');
+
+

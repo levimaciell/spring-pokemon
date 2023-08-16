@@ -1,10 +1,13 @@
 package com.pkmn.api.user.controllers;
 
 import java.util.List;
+
 import com.pkmn.api.user.dto.UserDto;
 import com.pkmn.api.user.dto.UserIdDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,8 +24,8 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public void insertUser(@RequestBody UserIdDto user){
-        service.insertUser(user);
+    public ResponseEntity<UserIdDto> insertUser(@RequestBody UserIdDto user){
+        return new ResponseEntity<UserIdDto>(service.insertUser(user), HttpStatus.CREATED);
     }
 
 }
