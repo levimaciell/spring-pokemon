@@ -18,8 +18,4 @@ public class UserService {
         return repository.findAll().stream().map(x -> new UserDto(x)).toList();
     }
 
-
-
-
-
 }
