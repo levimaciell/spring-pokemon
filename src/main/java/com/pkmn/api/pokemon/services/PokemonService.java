@@ -5,12 +5,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pkmn.api.Utils.Utils;
 import com.pkmn.api.pokemon.dto.PokemonMaxDto;
 import com.pkmn.api.pokemon.dto.PokemonMinDto;
 import com.pkmn.api.pokemon.entities.Pokemon;
 import com.pkmn.api.pokemon.exceptions.PokemonNotfoundException;
 import com.pkmn.api.pokemon.repositories.PokemonRepository;
+import com.pkmn.api.utils.Utils;
 
 @Service
 public class PokemonService {

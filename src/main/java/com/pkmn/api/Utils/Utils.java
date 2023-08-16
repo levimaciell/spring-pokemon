@@ -1,4 +1,4 @@
-package com.pkmn.api.Utils;
+package com.pkmn.api.utils;
 
 public class Utils {
     
