@@ -1,7 +1,6 @@
 package com.pkmn.api.utils;
 
 import com.pkmn.api.exceptions.UtilsException;
-import com.pkmn.api.user.dto.UserDto;
 import com.pkmn.api.user.dto.UserIdDto;
 import com.pkmn.api.user.entities.User;
 
@@ -45,6 +44,23 @@ public class Utils {
         userReturn.setUserName(user.getUserName());
 
         return userReturn;
+    }
+
+    public static boolean isUserValid(UserIdDto user){
+        if(user == null){
+            return false;
+        }
+        else{
+            if(user.getPassword().isBlank()){
+                return false;
+            }
+
+            else if(user.getUserName().isBlank()){
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

@@ -8,4 +8,6 @@ import com.pkmn.api.user.entities.User;
 @Repository
 public interface UserRepository extends JpaRepository<User,Long>{
     
+    
+    void deleteByUserNameAndPassword(String userName, String password);
 }
