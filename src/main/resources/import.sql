@@ -149,3 +149,13 @@ INSERT INTO pokemons VALUES (84,65,1,61,False,148,70,70,70,420,'Dragonair','Drag
 INSERT INTO pokemons VALUES (134,95,1,91,False,149,100,100,80,600,'Dragonite','Dragon','Flying');
 INSERT INTO pokemons VALUES (110,90,1,106,True,150,154,90,130,680,'Mewtwo','Psychic','');
 INSERT INTO pokemons VALUES (100,100,1,100,False,151,100,100,100,600,'Mew','Psychic','');
+
+
+
+
+
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('temp6t', 'rattatastRATS');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Pokey', 'pokeeeey');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('James', 'OHwdeer');
+
+
