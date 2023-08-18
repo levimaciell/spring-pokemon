@@ -1,12 +1,16 @@
 package com.pkmn.api.user.services;
 
 
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.pkmn.api.exceptions.UserServiceException;
 import com.pkmn.api.exceptions.UtilsException;
 import com.pkmn.api.user.dto.UserIdDto;
+import com.pkmn.api.user.dto.UserUpdateDto;
 import com.pkmn.api.user.entities.User;
 import com.pkmn.api.user.repositories.UserRepository;
 import com.pkmn.api.utils.Utils;
@@ -40,5 +44,48 @@ public class UserService {
             throw new UserServiceException("User is not valid for deletion!");
         }
         repository.deleteByUserNameAndPassword(user.getUserName(), user.getPassword());
+    }
+
+    @Transactional
+    public void updateUser(UserUpdateDto user){
+
+        try{
+            
+            //If username of change already exists, don't allow change
+            if(repository.existsByUserName(user.getChangeUserName()))
+                throw new UserServiceException(Errors.CHANGE_USERNAME_ALREADY_EXISTS.getError());
+
+            User userUpdate = repository.getReferenceById(getIdByUserName(user));
+            updateUserData(userUpdate, user);
+            repository.save(userUpdate);
+        }
+        catch(NoSuchElementException e){
+            throw new UserServiceException(e.getMessage());
+        }
+    }
+
+    private Long getIdByUserName(UserUpdateDto user){  
+        Optional<User> userResult = repository.findByUserName(user.getActualUsername());
+        return userResult.get().getId();
+    }
+
+    private void updateUserData(User user, UserUpdateDto userUpdateData){
+        user.setUserName(userUpdateData.getChangeUserName());
+        user.setPassword(userUpdateData.getChangePassword());
+    }
+
+    public enum Errors{
+
+        CHANGE_USERNAME_ALREADY_EXISTS("The username for change is already taken. Please try again with another username!");
+
+        private final String error;
+
+        private Errors(String error){
+            this.error = error;
+        }
+
+        public String getError(){
+            return error;
+        }
     }
 }
