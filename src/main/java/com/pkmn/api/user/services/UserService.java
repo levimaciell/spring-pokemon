@@ -59,8 +59,11 @@ public class UserService {
             updateUserData(userUpdate, user);
             repository.save(userUpdate);
         }
+        catch(UserServiceException u){
+            throw u;
+        }
         catch(NoSuchElementException e){
-            throw new UserServiceException(e.getMessage());
+            throw new UserServiceException("The actualUsername does not exist, please inform a valid one!");
         }
     }
 
@@ -70,13 +73,29 @@ public class UserService {
     }
 
     private void updateUserData(User user, UserUpdateDto userUpdateData){
-        user.setUserName(userUpdateData.getChangeUserName());
-        user.setPassword(userUpdateData.getChangePassword());
+
+        //If both are blank, throw exception
+        if(userUpdateData.getChangeUserName().isBlank() && userUpdateData.getChangePassword().isBlank())
+            throw new UserServiceException(Errors.CHANGE_USERNAME_BOTH_FIELDS_BLANK.getError());
+
+        //If username is blank, but password is not
+        if(userUpdateData.getChangeUserName().isBlank() && !userUpdateData.getChangePassword().isBlank()){
+            user.setPassword(userUpdateData.getChangePassword());
+        }
+        //If username is not blank, but password is blank
+        else if(!userUpdateData.getChangeUserName().isBlank() && userUpdateData.getChangePassword().isBlank()){
+            user.setUserName(userUpdateData.getChangeUserName());
+        }
+        else{
+            user.setUserName(userUpdateData.getChangeUserName());
+            user.setPassword(userUpdateData.getChangePassword());
+        }
     }
 
     public enum Errors{
 
-        CHANGE_USERNAME_ALREADY_EXISTS("The username for change is already taken. Please try again with another username!");
+        CHANGE_USERNAME_ALREADY_EXISTS("The username for change is already taken. Please try again with another username!"),
+        CHANGE_USERNAME_BOTH_FIELDS_BLANK("Both fields are blank. Only one can be blank so the other can be changed");
 
         private final String error;
 
