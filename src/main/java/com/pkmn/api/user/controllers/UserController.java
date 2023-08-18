@@ -1,5 +1,6 @@
 package com.pkmn.api.user.controllers;
 
+import com.pkmn.api.exceptions.UserServiceException;
 import com.pkmn.api.user.dto.UserIdDto;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,14 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<UserIdDto> insertUser(@RequestBody UserIdDto user){
-        return new ResponseEntity<UserIdDto>(service.insertUser(user), HttpStatus.CREATED);
+    public ResponseEntity<String> insertUser(@RequestBody UserIdDto user){
+        try{
+            service.insertUser(user);
+            return new ResponseEntity<String>("User Created sucessfully!", HttpStatus.CREATED);
+        }
+        catch (UserServiceException e){
+            return new ResponseEntity<String>("There is already a user with this name", HttpStatus.CONFLICT);
+        }
     }
 
     @DeleteMapping

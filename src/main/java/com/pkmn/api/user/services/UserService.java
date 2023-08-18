@@ -23,6 +23,10 @@ public class UserService {
     public UserIdDto insertUser(UserIdDto user){
         try {
             User userInsert = Utils.userDtoToUser(user);
+
+            if(repository.findByUserName(user.getUserName()).isPresent())
+                throw new UserServiceException("Cannot insert user. User name already exists");
+            
             return new UserIdDto(repository.save(userInsert));
         } 
         catch (UtilsException e) {
