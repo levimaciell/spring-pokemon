@@ -29,27 +29,15 @@ public class PokemonController {
 
     @GetMapping(value = "/search/entry/{pokedexEntry}")
     public ResponseEntity<PokemonMaxDto> findByPokedexEntry(@PathVariable Integer pokedexEntry){
-        PokemonMaxDto pkmn;
-        try {
-            pkmn = pkmnService.findByPokedexEntry(pokedexEntry);
-            return ResponseEntity.ok().body(pkmn);
-        } 
-        catch (PokemonNotfoundException e) {
-            return ResponseEntity.notFound().build();
-        }
+        PokemonMaxDto pkmn = pkmnService.findByPokedexEntry(pokedexEntry);
+        return ResponseEntity.ok().body(pkmn);
     }
 
     @GetMapping(value = "/search/pokemon-name/{pokemonName}")
     public ResponseEntity<PokemonMaxDto> findByPokemonName(@PathVariable String pokemonName){
 
-        try {
-            PokemonMaxDto pkmn = pkmnService.findByName(pokemonName);
-            return ResponseEntity.ok().body(pkmn);
-        } 
-        catch (PokemonNotfoundException e) {
-            return ResponseEntity.notFound().build();
-        }
-
+        PokemonMaxDto pkmn = pkmnService.findByName(pokemonName);
+        return ResponseEntity.ok().body(pkmn);
     }
 
 }
