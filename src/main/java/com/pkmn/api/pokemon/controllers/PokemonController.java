@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.pkmn.api.pokemon.dto.PokemonMaxDto;
 import com.pkmn.api.pokemon.dto.PokemonMinDto;
-import com.pkmn.api.pokemon.exceptions.PokemonNotfoundException;
 import com.pkmn.api.pokemon.services.PokemonService;
 
 @RestController

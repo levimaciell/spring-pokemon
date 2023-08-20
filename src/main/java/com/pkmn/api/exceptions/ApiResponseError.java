@@ -3,12 +3,11 @@ package com.pkmn.api.exceptions;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class ApiResponse {
+public class ApiResponseError {
     
     @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
     private LocalDateTime timestamp;
@@ -16,17 +15,17 @@ public class ApiResponse {
     private String status;
     private List<String> errors;
 
-    public ApiResponse() {
+    public ApiResponseError() {
     }
 
-    public ApiResponse(LocalDateTime timestamp, Integer code, String status, List<String> errors) {
+    public ApiResponseError(LocalDateTime timestamp, Integer code, String status, List<String> errors) {
         this.timestamp = timestamp;
         this.code = code;
         this.status = status;
         this.errors = errors;
     }
 
-    public ApiResponse(HttpStatus status, Exception exception, List<String> list){
+    public ApiResponseError(HttpStatus status, Exception exception, List<String> list){
         timestamp = LocalDateTime.now();
         code = status.value();
         this.status = status.name();

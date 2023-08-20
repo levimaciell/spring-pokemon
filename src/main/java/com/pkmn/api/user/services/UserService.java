@@ -7,11 +7,11 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.pkmn.api.exceptions.UserServiceException;
-import com.pkmn.api.exceptions.UtilsException;
 import com.pkmn.api.user.dto.UserIdDto;
 import com.pkmn.api.user.dto.UserUpdateDto;
 import com.pkmn.api.user.entities.User;
+import com.pkmn.api.user.exceptions.UserCreationException;
+import com.pkmn.api.user.exceptions.UserServiceException;
 import com.pkmn.api.user.repositories.UserRepository;
 import com.pkmn.api.utils.Utils;
 
@@ -25,17 +25,14 @@ public class UserService {
 
     @Transactional
     public UserIdDto insertUser(UserIdDto user){
-        try {
-            User userInsert = Utils.userDtoToUser(user);
+   
+        User userInsert = userIdDtoToUser(user);
 
-            if(repository.findByUserName(user.getUserName()).isPresent())
-                throw new UserServiceException("Cannot insert user. User name already exists");
+        if(repository.findByUserName(user.getUserName()).isPresent())
+            throw new UserCreationException("User name is already taken!");
             
-            return new UserIdDto(repository.save(userInsert));
-        } 
-        catch (UtilsException e) {
-            throw new UserServiceException("There was a problem converting a UserDto to a User!\nReason:" + e.getMessage());
-        }
+        return new UserIdDto(repository.save(userInsert));
+        
     }
 
     @Transactional
@@ -90,6 +87,27 @@ public class UserService {
             user.setUserName(userUpdateData.getChangeUserName());
             user.setPassword(userUpdateData.getChangePassword());
         }
+    }
+
+    public static User userIdDtoToUser(UserIdDto user){
+
+        if(user == null){
+            throw new UserCreationException("User Informed is null !");
+        }
+        else{
+            if(user.getUserName().isBlank()){
+                throw new UserCreationException("Username is blank! It's necessary to have a username!");
+            }
+            else if(user.getPassword().isBlank()){
+                throw new UserCreationException("Password informed is blank! It's necessary to have a password");
+            }
+        }
+
+        User userReturn = new User();
+        userReturn.setPassword(user.getPassword());
+        userReturn.setUserName(user.getUserName());
+
+        return userReturn;
     }
 
     public enum Errors{

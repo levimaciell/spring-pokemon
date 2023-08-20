@@ -1,4 +1,4 @@
-package com.pkmn.api.exceptions;
+package com.pkmn.api.utils.exceptions;
 
 public class UtilsException extends Exception {
     

@@ -1,4 +1,4 @@
-package com.pkmn.api.exceptions;
+package com.pkmn.api.user.exceptions;
 
 public class UserServiceException extends RuntimeException {
     
