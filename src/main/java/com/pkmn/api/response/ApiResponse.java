@@ -1,7 +1,6 @@
 package com.pkmn.api.response;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 import org.springframework.http.HttpStatus;
 

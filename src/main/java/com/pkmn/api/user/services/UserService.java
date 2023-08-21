@@ -16,7 +16,6 @@ import com.pkmn.api.user.exceptions.UserDeletionException;
 import com.pkmn.api.user.exceptions.UserServiceException;
 import com.pkmn.api.user.exceptions.UserUpdateException;
 import com.pkmn.api.user.repositories.UserRepository;
-import com.pkmn.api.utils.Utils;
 
 import jakarta.transaction.Transactional;
 

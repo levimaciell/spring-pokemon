@@ -1,8 +1,8 @@
 package com.pkmn.api.user.controllers;
 
+import com.pkmn.api.response.ApiResponse;
 import com.pkmn.api.user.dto.UserIdDto;
 import com.pkmn.api.user.dto.UserUpdateDto;
-import com.pkmn.api.user.exceptions.UserServiceException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,24 +24,26 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<String> insertUser(@RequestBody UserIdDto user){
+    public ResponseEntity<ApiResponse> insertUser(@RequestBody UserIdDto user){
 
         service.insertUser(user);
-        return new ResponseEntity<String>("User Created sucessfully!", HttpStatus.CREATED);
+        
+        ApiResponse response = new ApiResponse(HttpStatus.CREATED, "User created sucessfully!");
+        return new ResponseEntity<ApiResponse>(response, HttpStatus.CREATED);
 
     }
 
     @DeleteMapping
-    public ResponseEntity<UserIdDto> deleteUser(@RequestBody UserIdDto user){
+    public ResponseEntity<ApiResponse> deleteUser(@RequestBody UserIdDto user){
         service.deleteUser(user);
-        return ResponseEntity.accepted().body(user);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping
     public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto user){
 
         service.updateUser(user);
-        return new ResponseEntity<String>("User Updated Succesfully", HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
-
 }
