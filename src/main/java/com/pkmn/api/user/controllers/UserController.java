@@ -39,13 +39,9 @@ public class UserController {
 
     @PutMapping
     public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto user){
-        try{
-            service.updateUser(user);
-            return new ResponseEntity<String>("User Updated Succesfully", HttpStatus.OK);
-        }
-        catch(UserServiceException e){
-            return new ResponseEntity<String>("User not updated. \nReason: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
+
+        service.updateUser(user);
+        return new ResponseEntity<String>("User Updated Succesfully", HttpStatus.OK);
     }
 
 }

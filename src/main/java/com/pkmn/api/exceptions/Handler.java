@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.pkmn.api.pokemon.exceptions.PokemonNotfoundException;
 import com.pkmn.api.user.exceptions.UserCreationException;
 import com.pkmn.api.user.exceptions.UserDeletionException;
+import com.pkmn.api.user.exceptions.UserUpdateException;
 
 @RestControllerAdvice
 public class Handler {
@@ -41,9 +42,18 @@ public class Handler {
 
     @ExceptionHandler(UserDeletionException.class)
     public ResponseEntity<ApiResponseError> userDeletionError(UserDeletionException exception){
+
         ApiResponseError response = new ApiResponseError(exception.getHttpCode(), List.of(
             "It was not possible to delete the user", "Reason: " + exception.getMessage()));
 
+        return new ResponseEntity<ApiResponseError>(response, exception.getHttpCode());
+    }
+
+    @ExceptionHandler(UserUpdateException.class)
+    public ResponseEntity<ApiResponseError> userUpdateError(UserUpdateException exception){
+
+        ApiResponseError response = new ApiResponseError(exception.getHttpCode(), List.of("It was not possible to update the user", "Reason: " + exception.getMessage()));
+        
         return new ResponseEntity<ApiResponseError>(response, exception.getHttpCode());
     }
 

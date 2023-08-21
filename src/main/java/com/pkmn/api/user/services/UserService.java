@@ -14,6 +14,7 @@ import com.pkmn.api.user.entities.User;
 import com.pkmn.api.user.exceptions.UserCreationException;
 import com.pkmn.api.user.exceptions.UserDeletionException;
 import com.pkmn.api.user.exceptions.UserServiceException;
+import com.pkmn.api.user.exceptions.UserUpdateException;
 import com.pkmn.api.user.repositories.UserRepository;
 import com.pkmn.api.utils.Utils;
 
@@ -63,17 +64,19 @@ public class UserService {
             
             //If username of change already exists, don't allow change
             if(repository.existsByUserName(user.getChangeUserName()))
-                throw new UserServiceException(Errors.CHANGE_USERNAME_ALREADY_EXISTS.getError());
+                throw new UserUpdateException(Errors.CHANGE_USERNAME_ALREADY_EXISTS.getError(),HttpStatus.CONFLICT);
 
             User userUpdate = repository.getReferenceById(getIdByUserName(user));
             updateUserData(userUpdate, user);
             repository.save(userUpdate);
         }
+        //bad request
         catch(UserServiceException u){
-            throw u;
+            throw new UserUpdateException(u.getMessage(), HttpStatus.BAD_REQUEST);
         }
+        //No such user in system
         catch(NoSuchElementException e){
-            throw new UserServiceException("The actualUsername does not exist, please inform a valid one!");
+            throw new UserUpdateException("The actualUsername does not exist, please inform a valid one!", HttpStatus.NOT_FOUND);
         }
     }
 
