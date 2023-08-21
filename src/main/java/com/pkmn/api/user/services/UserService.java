@@ -5,12 +5,14 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.pkmn.api.user.dto.UserIdDto;
 import com.pkmn.api.user.dto.UserUpdateDto;
 import com.pkmn.api.user.entities.User;
 import com.pkmn.api.user.exceptions.UserCreationException;
+import com.pkmn.api.user.exceptions.UserDeletionException;
 import com.pkmn.api.user.exceptions.UserServiceException;
 import com.pkmn.api.user.repositories.UserRepository;
 import com.pkmn.api.utils.Utils;
@@ -37,10 +39,21 @@ public class UserService {
 
     @Transactional
     public void deleteUser(UserIdDto user){
-        if(!Utils.isUserValid(user)){
-            throw new UserServiceException("User is not valid for deletion!");
+        
+        try {
+            isUserValid(user);
+
+            if(repository.existsByUserNameAndPassword(user.getUserName(), user.getPassword())){
+                repository.deleteByUserNameAndPassword(user.getUserName(), user.getPassword());      
+            }
+            else{
+                throw new UserDeletionException("User not found for deletion", HttpStatus.NOT_FOUND);
+            }
+
+        } 
+        catch (UserServiceException e) {
+            throw new UserDeletionException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        repository.deleteByUserNameAndPassword(user.getUserName(), user.getPassword());
     }
 
     @Transactional
@@ -89,7 +102,7 @@ public class UserService {
         }
     }
 
-    public static User userIdDtoToUser(UserIdDto user){
+    private User userIdDtoToUser(UserIdDto user){
 
         if(user == null){
             throw new UserCreationException("User Informed is null !");
@@ -109,6 +122,22 @@ public class UserService {
 
         return userReturn;
     }
+
+    private void isUserValid(UserIdDto user){
+        if(user == null){
+            throw new UserServiceException("User is null!");
+        }
+        else{
+            if(user.getPassword().isBlank()){
+                throw new UserServiceException("Password field is blank!");
+            }
+
+            else if(user.getUserName().isBlank()){
+                throw new UserServiceException("Username field is blank! ");
+            }
+        }
+    }
+
 
     public enum Errors{
 

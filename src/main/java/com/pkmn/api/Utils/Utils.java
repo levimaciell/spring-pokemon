@@ -1,7 +1,5 @@
 package com.pkmn.api.utils;
 
-import com.pkmn.api.user.dto.UserIdDto;
-
 public class Utils {
     
     /**
@@ -18,23 +16,6 @@ public class Utils {
         }
 
         return string;
-    }
-
-    public static boolean isUserValid(UserIdDto user){
-        if(user == null){
-            return false;
-        }
-        else{
-            if(user.getPassword().isBlank()){
-                return false;
-            }
-
-            else if(user.getUserName().isBlank()){
-                return false;
-            }
-        }
-
-        return true;
     }
 
 }

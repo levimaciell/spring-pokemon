@@ -33,13 +33,8 @@ public class UserController {
 
     @DeleteMapping
     public ResponseEntity<UserIdDto> deleteUser(@RequestBody UserIdDto user){
-        try{
-            service.deleteUser(user);
-            return ResponseEntity.accepted().body(user);
-        }
-        catch(Exception e){
-            return ResponseEntity.notFound().build();
-        }
+        service.deleteUser(user);
+        return ResponseEntity.accepted().body(user);
     }
 
     @PutMapping

@@ -25,7 +25,7 @@ public class ApiResponseError {
         this.errors = errors;
     }
 
-    public ApiResponseError(HttpStatus status, Exception exception, List<String> list){
+    public ApiResponseError(HttpStatus status, List<String> list){
         timestamp = LocalDateTime.now();
         code = status.value();
         this.status = status.name();
