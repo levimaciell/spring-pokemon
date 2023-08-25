@@ -1,6 +1,6 @@
 package com.pkmn.api.user.controllers;
 
-import com.pkmn.api.exceptions.UserServiceException;
+import com.pkmn.api.response.ApiResponse;
 import com.pkmn.api.user.dto.UserIdDto;
 import com.pkmn.api.user.dto.UserUpdateDto;
 
@@ -24,36 +24,26 @@ public class UserController {
     private UserService service;
 
     @PostMapping
-    public ResponseEntity<String> insertUser(@RequestBody UserIdDto user){
-        try{
-            service.insertUser(user);
-            return new ResponseEntity<String>("User Created sucessfully!", HttpStatus.CREATED);
-        }
-        catch (UserServiceException e){
-            return new ResponseEntity<String>("There is already a user with this name", HttpStatus.CONFLICT);
-        }
+    public ResponseEntity<ApiResponse> insertUser(@RequestBody UserIdDto user){
+
+        service.insertUser(user);
+        
+        ApiResponse response = new ApiResponse(HttpStatus.CREATED, "User created sucessfully!");
+        return new ResponseEntity<ApiResponse>(response, HttpStatus.CREATED);
+
     }
 
     @DeleteMapping
-    public ResponseEntity<UserIdDto> deleteUser(@RequestBody UserIdDto user){
-        try{
-            service.deleteUser(user);
-            return ResponseEntity.accepted().body(user);
-        }
-        catch(Exception e){
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<ApiResponse> deleteUser(@RequestBody UserIdDto user){
+        service.deleteUser(user);
+
+        return ResponseEntity.noContent().build();
     }
 
     @PutMapping
     public ResponseEntity<String> updateUser(@RequestBody UserUpdateDto user){
-        try{
-            service.updateUser(user);
-            return new ResponseEntity<String>("User Updated Succesfully", HttpStatus.OK);
-        }
-        catch(UserServiceException e){
-            return new ResponseEntity<String>("User not updated. \nReason: " + e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
 
+        service.updateUser(user);
+        return ResponseEntity.noContent().build();
+    }
 }

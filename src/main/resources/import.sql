@@ -154,8 +154,12 @@ INSERT INTO pokemons VALUES (100,100,1,100,False,151,100,100,100,600,'Mew','Psyc
 
 
 
-INSERT INTO users(USER_NAME, PASSWORD) VALUES ('temp6t', 'rattatastRATS');
-INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Pokey', 'pokeeeey');
-INSERT INTO users(USER_NAME, PASSWORD) VALUES ('James', 'OHwdeer');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Giovanni', 'TeamRocket123');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Gary_Oak', 'BigRedCar');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Professor_Oak', 'Reeesearch');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Brock', 'BigOnix');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Misty', 'PsyDuuck');
+INSERT INTO users(USER_NAME, PASSWORD) VALUES ('Ash_Ketshum', 'PikachuIChooseYou');
+
 
 

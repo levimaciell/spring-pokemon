@@ -22,7 +22,7 @@ public class PokemonService {
         return repo.findAll().stream().map(PokemonMinDto::new).toList();
     }
 
-    public PokemonMaxDto findByPokedexEntry(Integer pokedexEntry) throws PokemonNotfoundException{
+    public PokemonMaxDto findByPokedexEntry(Integer pokedexEntry){
 
         Pokemon searchResult = repo.findByPokedexEntry(pokedexEntry);
 
@@ -36,7 +36,7 @@ public class PokemonService {
         
     }
 
-    public PokemonMaxDto findByName(String name) throws PokemonNotfoundException{
+    public PokemonMaxDto findByName(String name){
 
         Pokemon searchResult = repo.findByName(Utils.capitalizeString(name));
         
@@ -44,7 +44,7 @@ public class PokemonService {
             return new PokemonMaxDto(searchResult);
         }
         else{
-            throw new PokemonNotfoundException("Pokemon with name " + name + " was not found");
+            throw new PokemonNotfoundException("Pokemon with name '" + name + "' was not found");
         }
         
     }

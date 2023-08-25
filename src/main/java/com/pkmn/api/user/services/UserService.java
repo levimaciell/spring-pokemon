@@ -5,15 +5,17 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import com.pkmn.api.exceptions.UserServiceException;
-import com.pkmn.api.exceptions.UtilsException;
 import com.pkmn.api.user.dto.UserIdDto;
 import com.pkmn.api.user.dto.UserUpdateDto;
 import com.pkmn.api.user.entities.User;
+import com.pkmn.api.user.exceptions.UserCreationException;
+import com.pkmn.api.user.exceptions.UserDeletionException;
+import com.pkmn.api.user.exceptions.UserServiceException;
+import com.pkmn.api.user.exceptions.UserUpdateException;
 import com.pkmn.api.user.repositories.UserRepository;
-import com.pkmn.api.utils.Utils;
 
 import jakarta.transaction.Transactional;
 
@@ -25,45 +27,61 @@ public class UserService {
 
     @Transactional
     public UserIdDto insertUser(UserIdDto user){
-        try {
-            User userInsert = Utils.userDtoToUser(user);
+   
+        User userInsert = userIdDtoToUser(user);
 
-            if(repository.findByUserName(user.getUserName()).isPresent())
-                throw new UserServiceException("Cannot insert user. User name already exists");
+        if(repository.findByUserName(user.getUserName()).isPresent())
+            throw new UserCreationException("User name is already taken!");
             
-            return new UserIdDto(repository.save(userInsert));
-        } 
-        catch (UtilsException e) {
-            throw new UserServiceException("There was a problem converting a UserDto to a User!\nReason:" + e.getMessage());
-        }
+        return new UserIdDto(repository.save(userInsert));
+        
     }
 
     @Transactional
     public void deleteUser(UserIdDto user){
-        if(!Utils.isUserValid(user)){
-            throw new UserServiceException("User is not valid for deletion!");
+        
+        try {
+            isUserValid(user);
+
+            if(repository.existsByUserNameAndPassword(user.getUserName(), user.getPassword())){
+                repository.deleteByUserNameAndPassword(user.getUserName(), user.getPassword());      
+            }
+            else{
+                throw new UserDeletionException("User not found for deletion", HttpStatus.NOT_FOUND);
+            }
+
+        } 
+        catch (UserServiceException e) {
+            throw new UserDeletionException(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        repository.deleteByUserNameAndPassword(user.getUserName(), user.getPassword());
     }
 
     @Transactional
     public void updateUser(UserUpdateDto user){
 
         try{
+
+            //If username and password exist in db, allow change. Else, not allow change
+            if(!repository.existsByUserNameAndPassword(user.getActualUsername(), user.getActualPassword())){
+                throw new UserUpdateException("Actual user info is invalid!", HttpStatus.FORBIDDEN);
+            }
             
             //If username of change already exists, don't allow change
             if(repository.existsByUserName(user.getChangeUserName()))
-                throw new UserServiceException(Errors.CHANGE_USERNAME_ALREADY_EXISTS.getError());
+                throw new UserUpdateException(Errors.CHANGE_USERNAME_ALREADY_EXISTS.getError(),HttpStatus.CONFLICT);
 
+            
             User userUpdate = repository.getReferenceById(getIdByUserName(user));
             updateUserData(userUpdate, user);
             repository.save(userUpdate);
         }
+        //bad request
         catch(UserServiceException u){
-            throw u;
+            throw new UserUpdateException(u.getMessage(), HttpStatus.BAD_REQUEST);
         }
+        //No such user in system
         catch(NoSuchElementException e){
-            throw new UserServiceException("The actualUsername does not exist, please inform a valid one!");
+            throw new UserUpdateException("The actualUsername does not exist, please inform a valid one!", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -91,6 +109,43 @@ public class UserService {
             user.setPassword(userUpdateData.getChangePassword());
         }
     }
+
+    private User userIdDtoToUser(UserIdDto user){
+
+        if(user == null){
+            throw new UserCreationException("User Informed is null !");
+        }
+        else{
+            if(user.getUserName().isBlank()){
+                throw new UserCreationException("Username is blank! It's necessary to have a username!");
+            }
+            else if(user.getPassword().isBlank()){
+                throw new UserCreationException("Password informed is blank! It's necessary to have a password");
+            }
+        }
+
+        User userReturn = new User();
+        userReturn.setPassword(user.getPassword());
+        userReturn.setUserName(user.getUserName());
+
+        return userReturn;
+    }
+
+    private void isUserValid(UserIdDto user){
+        if(user == null){
+            throw new UserServiceException("User is null!");
+        }
+        else{
+            if(user.getPassword().isBlank()){
+                throw new UserServiceException("Password field is blank!");
+            }
+
+            else if(user.getUserName().isBlank()){
+                throw new UserServiceException("Username field is blank! ");
+            }
+        }
+    }
+
 
     public enum Errors{
 
