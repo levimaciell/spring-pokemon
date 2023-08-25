@@ -2,6 +2,7 @@ package com.pkmn.api.user.dto;
 
 public class UserUpdateDto {
     private String actualUsername;
+    private String actualPassword;
     private String changeUserName;
     private String changePassword;
     
@@ -20,5 +21,8 @@ public class UserUpdateDto {
         return changePassword;
     }
 
+    public String getActualPassword(){
+        return actualPassword;
+    }
     
 }

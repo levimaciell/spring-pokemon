@@ -60,11 +60,17 @@ public class UserService {
     public void updateUser(UserUpdateDto user){
 
         try{
+
+            //If username and password exist in db, allow change. Else, not allow change
+            if(!repository.existsByUserNameAndPassword(user.getActualUsername(), user.getActualPassword())){
+                throw new UserUpdateException("Actual user info is invalid!", HttpStatus.FORBIDDEN);
+            }
             
             //If username of change already exists, don't allow change
             if(repository.existsByUserName(user.getChangeUserName()))
                 throw new UserUpdateException(Errors.CHANGE_USERNAME_ALREADY_EXISTS.getError(),HttpStatus.CONFLICT);
 
+            
             User userUpdate = repository.getReferenceById(getIdByUserName(user));
             updateUserData(userUpdate, user);
             repository.save(userUpdate);
